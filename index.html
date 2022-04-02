@@ -286,8 +286,8 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-c9d8fa83.css" rel="stylesheet" media="screen" />
-    <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
+    <link href="stylesheets/screen-4d6a9a9f.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print-fac23f75.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-b12a2749.js"></script>
 
     <script>
@@ -295,7 +295,7 @@
     </script>
   </head>
 
-  <body class="index" data-languages="[]">
+  <body class="index" data-languages="[&quot;C#&quot;]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -304,6 +304,9 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-510d91ce.png" class="logo" alt="" />
+        <div class="lang-selector">
+              <a href="#" data-language-name="C#">C#</a>
+        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -320,9 +323,23 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#using-desonity" class="toc-h1 toc-link" data-title="Using Desonity">Using Desonity</a>
+          </li>
+          <li>
+            <a href="#identity-login" class="toc-h1 toc-link" data-title="Identity Login">Identity Login</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#setting-up-the-backend" class="toc-h2 toc-link" data-title="Setting up the backend">Setting up the backend</a>
+                  </li>
+                  <li>
+                    <a href="#login-with-identity" class="toc-h2 toc-link" data-title="Login with Identity">Login with Identity</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='https://github.com/Desonity'>Visit the Github Organisation</a></li>
+            <li><a href='https://github.com/Desonity'>Desonity on GitHub</a></li>
             <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
         </ul>
     </div>
@@ -357,9 +374,106 @@ Adding using Git Url requires you to have GIT pre-installed on your machine.
 <p>Unity will now clone the repo into the Packages folder of your project and install any other needed dependencies.</p>
 
 <p>If all went well, GG! You just completed step 1 of adding DeSo to your game.</p>
+<h1 id='using-desonity'>Using Desonity</h1>
+<blockquote>
+<p>Since Desonity uses API calls to interact with the DeSo Blockchain, you must use its methods within an async method.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">using</span> <span class="nn">UnityEngine</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Desonity</span><span class="p">;</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">ExampleCLass</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
+<span class="p">{</span>
+    <span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// Do something with Desonity</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To use Desonity you must add the Desonity namespace to your script files.</p>
+<h1 id='identity-login'>Identity Login</h1><h2 id='setting-up-the-backend'>Setting up the backend</h2>
+<p>In order to use Identity Login you need to setup a backend with which Unity will interact and open the webbrowser where the user can login, the logged in Public Key will be returned to the script which called the login function.</p>
+
+<p>A Python Flask example is available in <a href="https://github.com/Desonity/Backend-Flask"><code>Desonity/Backend-Flask</code></a> repository. You can host this on a paid VPS or use a free service such as Heroku or Repl.it.</p>
+
+<blockquote>
+<p>A flask app is already hosted on <code>https://desonity-login.herokuapp.com</code> which you can use for testing purposes. (Not reccomended for production use)</p>
+</blockquote>
+
+<aside class="notice">
+This backend is also used for signing transactions as there is no support for signing a DeSo Transaction Hex within C# yet.
+As soon as I figure out how to sign Transactions in C#, I will replace signing with backend.
+</aside>
+<h2 id='login-with-identity'>Login with Identity</h2>
+<p>Create an Identity object using <code>Desonity.Identity()</code>.</p>
+
+<blockquote>
+<p>This will open the default browser and prompt the user to login with a DeSo account.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">appName</span> <span class="p">=</span> <span class="s">"Docs-App-Demo"</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">backendUrl</span> <span class="p">=</span> <span class="s">"https://desonity-login.herokuapp.com"</span><span class="p">;</span>
+
+    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">backendUrl</span><span class="p">);</span>
+    <span class="kt">string</span> <span class="n">loggedInPublicKey</span> <span class="p">=</span> <span class="k">await</span> <span class="n">user</span><span class="p">.</span><span class="nf">Login</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p>Optionally you can also pass a DeSo public key and perform actions using that.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">myPublicKey</span> <span class="p">=</span> <span class="s">"BC1YLhF5DHfgqM7rwYK8PVnfKDmMXyVeQqJyeJ8YGsmbVb14qTm123G"</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">myPublicKey</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<blockquote>
+<p>If you want to be able to create transactions, pass the Public Key and its Seed Hex as well.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">appName</span> <span class="p">=</span> <span class="s">"Docs-App-Demo"</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">backendUrl</span> <span class="p">=</span> <span class="s">"https://desonity-login.herokuapp.com"</span><span class="p">;</span>
+
+    <span class="kt">string</span> <span class="n">myPublicKey</span> <span class="p">=</span> <span class="s">"BC1YLhF5DHfgqM7rwYK8PVnfKDmMXyVeQqJyeJ8YGsmbVb14qTm123G"</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">mySeedHex</span> <span class="p">=</span> <span class="s">"NEVER GONNA GIVE YOU UP, NEVER GONNA LET YOU DOWN"</span><span class="p">;</span> <span class="c1">// Fake SeedHex</span>
+
+    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">backendUrl</span><span class="p">,</span> <span class="n">myPublicKey</span><span class="p">,</span> <span class="n">mySeedHex</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>Parameters</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>appName</td>
+<td>Name of the app that will be shown to users during Login.</td>
+</tr>
+<tr>
+<td>backendUrl</td>
+<td>Url for the backend which will handle Login and Signing Transactions.</td>
+</tr>
+<tr>
+<td>PublicKeyBase58Check</td>
+<td>Public Key of a DeSo Profile (optional).</td>
+</tr>
+<tr>
+<td>seedHex</td>
+<td>Seed Hex of the passed Public Key (optional).</td>
+</tr>
+</tbody></table>
+
+<aside class="notice">
+This identity object will be used repeatedly with other classs to perform an action since all data such as Public Key and Seed Hex is stored with the identity object.
+</aside>
 
       </div>
       <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="C#">C#</a>
+          </div>
       </div>
     </div>
   </body>
