@@ -1,18 +1,18 @@
 ---
 title: Desonity Documentation
 
-# language_tabs: # must be one of https://git.io/vQNgJ
-  # - C#
+language_tabs: # must be one of https://git.io/vQNgJ
+  - C#
 
 toc_footers:
-  - <a href='https://github.com/Desonity'>Visit the Github Organisation</a>
+  - <a href='https://github.com/Desonity'>Desonity on GitHub</a>
   - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
 
 includes:
-  # - errors
+  - identity
 
 search: true
-
+collapse: true
 code_clipboard: true
 
 meta:
@@ -53,3 +53,22 @@ Adding using Git Url requires you to have GIT pre-installed on your machine.
 Unity will now clone the repo into the Packages folder of your project and install any other needed dependencies.
 
 If all went well, GG! You just completed step 1 of adding DeSo to your game.
+
+# Using Desonity
+
+> Since Desonity uses API calls to interact with the DeSo Blockchain, you must use its methods within an async method.
+
+```cs
+using UnityEngine;
+using Desonity;
+
+public class ExampleCLass : MonoBehaviour
+{
+    async void Start()
+    {
+        // Do something with Desonity
+    }
+}
+```
+
+To use Desonity you must add the Desonity namespace to your script files.
