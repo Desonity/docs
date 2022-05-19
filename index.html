@@ -317,11 +317,6 @@
           </li>
           <li>
             <a href="#installation" class="toc-h1 toc-link" data-title="Installation">Installation</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#install-using-git-url" class="toc-h2 toc-link" data-title="Install using Git Url">Install using Git Url</a>
-                  </li>
-              </ul>
           </li>
           <li>
             <a href="#using-desonity" class="toc-h1 toc-link" data-title="Using Desonity">Using Desonity</a>
@@ -337,6 +332,14 @@
                   </li>
               </ul>
           </li>
+          <li>
+            <a href="#creating-transactions" class="toc-h1 toc-link" data-title="Creating Transactions">Creating Transactions</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#getting-the-seed-hex" class="toc-h2 toc-link" data-title="Getting the Seed Hex">Getting the Seed Hex</a>
+                  </li>
+              </ul>
+          </li>
       </ul>
         <ul class="toc-footer">
             <li><a href='https://github.com/Desonity'>Desonity on GitHub</a></li>
@@ -349,31 +352,23 @@
         <h1 id='introduction'>Introduction</h1>
 <p>Desonity is a Package for <a href="https://en.wikipedia.org/wiki/Unity_(game_engine)">Unity Game Engine</a> that allows game developers to integrate the <a href="https://www.deso.org/">DeSo Blockchain</a> into their games.</p>
 
-<p>Using this, one can add features such as NFT based access to certain regions of a game, award skins to users in the game in the form of an NFT, let users buy and sell in game items through NFTs on DeSo.</p>
+<p>With Desonity, one can implement features such as NFTs, Creator Coins, DAO Coins, and Social aspects of the Deso Blockchain into their games.</p>
 <h1 id='installation'>Installation</h1>
 <aside class="notice">
 This guide assumes you have prior knowledge of the Unity Game Engine and its tools.
 </aside>
-<h2 id='install-using-git-url'>Install using Git Url</h2>
-<p>Open up the project in which you want to add Desonity navigate to the window menu and open the Package Manager.</p>
 
-<p><img src="images/installation/package manager-fbf921c9.png" alt="Package Manager" /></p>
+<ul>
+<li>Download the latest unitypackage from <a href="https://github.com/Desonity/Desonity/releases">releases</a>
+<img src="images/installation/releases-534e76f5.png" alt="github releases" /></li>
+<li>Open the downloaded unitypackage in unity and import the files.</li>
+</ul>
 
-<p>Choose add package form Git Url, paste</p>
-
-<p><code>https://github.com/desonity/desonity.git</code></p>
-
-<p>into the url field and hit add.</p>
-
-<p><img src="images/installation/add git url-de3127ea.png" alt="Add Git Url" /></p>
+<p>That&#39;s it! You&#39;ve imported Desonity in your project</p>
 
 <aside class="notice">
-Adding using Git Url requires you to have GIT pre-installed on your machine.
+If you are have conflicting dependencies for Desonity and your unity project, navigate to `Desonity/Runtime/Plugins` folder and try to manually remove common DLLs (donot delete the newer version of the packages).<br>Info about dependencies used by Desonity can be found <a href="#">here</a>.
 </aside>
-
-<p>Unity will now clone the repo into the Packages folder of your project and install any other needed dependencies.</p>
-
-<p>If all went well, GG! You just completed step 1 of adding DeSo to your game.</p>
 <h1 id='using-desonity'>Using Desonity</h1>
 <blockquote>
 <p>Since Desonity uses API calls to interact with the DeSo Blockchain, you must use its methods within an async method.</p>
@@ -383,26 +378,24 @@ Adding using Git Url requires you to have GIT pre-installed on your machine.
 
 <span class="k">public</span> <span class="k">class</span> <span class="nc">ExampleCLass</span> <span class="p">:</span> <span class="n">MonoBehaviour</span>
 <span class="p">{</span>
+    <span class="c1">// Start() is an Async function</span>
     <span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
     <span class="p">{</span>
         <span class="c1">// Do something with Desonity</span>
     <span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<p>To use Desonity you must add the Desonity namespace to your script files.</p>
+<p>To use Desonity you add the Desonity namespace to your script files.</p>
+
+<p>By default various Unity specific functions such as <code>Start()</code> donot support Async/Await methods. To get around this Desonity uses <a href="https://assetstore.unity.com/packages/tools/integration/async-await-support-101056">Async Await Support Asset</a> which can be found in <code>Desonity/Runtime/Plugins</code> folder.</p>
 <h1 id='identity-login'>Identity Login</h1><h2 id='setting-up-the-backend'>Setting up the backend</h2>
-<p>In order to use Identity Login you need to setup a backend with which Unity will interact and open the webbrowser where the user can login, the logged in Public Key will be returned to the script which called the login function.</p>
+<p>In order to use Identity Login you need to setup a backend with which Unity will interact and open the web browser where the user can login, the logged in Public Key will be returned to the script which called the login function.</p>
 
 <p>A Python Flask example is available in <a href="https://github.com/Desonity/Backend-Flask"><code>Desonity/Backend-Flask</code></a> repository. You can host this on a paid VPS or use a free service such as Heroku or Repl.it.</p>
 
 <blockquote>
-<p>A flask app is already hosted on <code>https://desonity-login.herokuapp.com</code> which you can use for testing purposes. (Not reccomended for production use)</p>
+<p>A flask app is already hosted on <code>https://desonity-login.herokuapp.com</code> which you can use for testing purposes. (Not reccomended for production use as uptime cannot be guaranteed)</p>
 </blockquote>
-
-<aside class="notice">
-This backend is also used for signing transactions as there is no support for signing a DeSo Transaction Hex within C# yet.
-As soon as I figure out how to sign Transactions in C#, I will replace signing with backend.
-</aside>
 <h2 id='login-with-identity'>Login with Identity</h2>
 <p>Create an Identity object using <code>Desonity.Identity()</code>.</p>
 
@@ -427,20 +420,6 @@ As soon as I figure out how to sign Transactions in C#, I will replace signing w
     <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">myPublicKey</span><span class="p">);</span>
 <span class="p">}</span>
 </code></pre></div>
-<blockquote>
-<p>If you want to be able to create transactions, pass the Public Key and its Seed Hex as well.</p>
-</blockquote>
-<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="kt">string</span> <span class="n">appName</span> <span class="p">=</span> <span class="s">"Docs-App-Demo"</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="n">backendUrl</span> <span class="p">=</span> <span class="s">"https://desonity-login.herokuapp.com"</span><span class="p">;</span>
-
-    <span class="kt">string</span> <span class="n">myPublicKey</span> <span class="p">=</span> <span class="s">"BC1YLhF5DHfgqM7rwYK8PVnfKDmMXyVeQqJyeJ8YGsmbVb14qTm123G"</span><span class="p">;</span>
-    <span class="kt">string</span> <span class="n">mySeedHex</span> <span class="p">=</span> <span class="s">"NEVER GONNA GIVE YOU UP, NEVER GONNA LET YOU DOWN"</span><span class="p">;</span> <span class="c1">// Fake SeedHex</span>
-
-    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">backendUrl</span><span class="p">,</span> <span class="n">myPublicKey</span><span class="p">,</span> <span class="n">mySeedHex</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div>
 <table><thead>
 <tr>
 <th>Parameters</th>
@@ -453,7 +432,7 @@ As soon as I figure out how to sign Transactions in C#, I will replace signing w
 </tr>
 <tr>
 <td>backendUrl</td>
-<td>Url for the backend which will handle Login and Signing Transactions.</td>
+<td>Url for the backend which will handle Login.</td>
 </tr>
 <tr>
 <td>PublicKeyBase58Check</td>
@@ -466,7 +445,29 @@ As soon as I figure out how to sign Transactions in C#, I will replace signing w
 </tbody></table>
 
 <aside class="notice">
-This identity object will be used repeatedly with other classs to perform an action since all data such as Public Key and Seed Hex is stored with the identity object.
+This identity object will be used repeatedly with other classs to perform actions since all data such as Public Key and Seed Hex is stored with the identity object.
+</aside>
+<h1 id='creating-transactions'>Creating Transactions</h1><h2 id='getting-the-seed-hex'>Getting the Seed Hex</h2>
+<p>To be able to create a post using Desonity you will need the <strong>Seed Hex</strong> of the Public Key you are going to make the post from.</p>
+
+<p><strong>The Seed Hex is a sensitive Token that only the owner of the Public Key should have.</strong></p>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">string</span> <span class="n">myPublicKey</span> <span class="p">=</span> <span class="s">"BC1YLhF5DHfgqM7rwYK8PVnfKDmMXyVeQqJyeJ8YGsmbVb14qTm123G"</span><span class="p">;</span>
+    <span class="kt">string</span> <span class="n">mySeedHex</span> <span class="p">=</span> <span class="s">"NEVER GONNA GIVE YOU UP, NEVER GONNA LET YOU DOWN"</span><span class="p">;</span> <span class="c1">// Fake SeedHex</span>
+
+    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">myPublicKey</span><span class="p">,</span> <span class="n">mySeedHex</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>To get your Seed Hex, visit any website where you logged in with deso identity and open the developer console.
+Navigate to the Application tab and find <em>identity.deso.org</em> under local storage. From there find the <em>Users</em> item and copy the seed hex from your public key.</p>
+
+<p>Once you get your seed, you can create an Identity object and pass the public key along with its seed hex. This identity object can now be used to sign transactions </p>
+
+<aside class="notice">
+Currently Desonity only supports signing and submitting transactions through the seed hex process. Transactions for other users cannot be signed yet as there is no support for webview/identity service that ask users for transaction approval.
+<br>
+I will appreciate if anyone knowing how to implement this within Unity can contribute to the project
 </aside>
 
       </div>
