@@ -10,6 +10,7 @@ toc_footers:
 
 includes:
   - identity
+  - making-transactions
 
 search: true
 collapse: true
@@ -24,7 +25,7 @@ meta:
 
 Desonity is a Package for [Unity Game Engine](https://en.wikipedia.org/wiki/Unity_(game_engine)) that allows game developers to integrate the [DeSo Blockchain](https://www.deso.org/) into their games.
   
-Using this, one can add features such as NFT based access to certain regions of a game, award skins to users in the game in the form of an NFT, let users buy and sell in game items through NFTs on DeSo.
+With Desonity, one can implement features such as NFTs, Creator Coins, DAO Coins, and Social aspects of the Deso Blockchain into their games.
 
 # Installation
 
@@ -32,27 +33,15 @@ Using this, one can add features such as NFT based access to certain regions of 
 This guide assumes you have prior knowledge of the Unity Game Engine and its tools.
 </aside>
 
-## Install using Git Url
+- Download the latest unitypackage from [releases](https://github.com/Desonity/Desonity/releases)
+  ![github releases](images/installation/releases.png)
+- Open the downloaded unitypackage in unity and import the files.
 
-Open up the project in which you want to add Desonity navigate to the window menu and open the Package Manager.
-
-![Package Manager](images/installation/package%20manager.png)
-
-Choose add package form Git Url, paste
-
-`https://github.com/desonity/desonity.git`
-
-into the url field and hit add.
-
-![Add Git Url](images/installation/add%20git%20url.png)
+That's it! You've imported Desonity in your project
 
 <aside class="notice">
-Adding using Git Url requires you to have GIT pre-installed on your machine.
+If you are have conflicting dependencies for Desonity and your unity project, navigate to `Desonity/Runtime/Plugins` folder and try to manually remove common DLLs (donot delete the newer version of the packages).<br>Info about dependencies used by Desonity can be found <a href="#">here</a>.
 </aside>
-
-Unity will now clone the repo into the Packages folder of your project and install any other needed dependencies.
-
-If all went well, GG! You just completed step 1 of adding DeSo to your game.
 
 # Using Desonity
 
@@ -64,6 +53,7 @@ using Desonity;
 
 public class ExampleCLass : MonoBehaviour
 {
+    // Start() is an Async function
     async void Start()
     {
         // Do something with Desonity
@@ -71,4 +61,6 @@ public class ExampleCLass : MonoBehaviour
 }
 ```
 
-To use Desonity you must add the Desonity namespace to your script files.
+To use Desonity you add the Desonity namespace to your script files.
+
+By default various Unity specific functions such as `Start()` donot support Async/Await methods. To get around this Desonity uses [Async Await Support Asset](https://assetstore.unity.com/packages/tools/integration/async-await-support-101056) which can be found in `Desonity/Runtime/Plugins` folder.
