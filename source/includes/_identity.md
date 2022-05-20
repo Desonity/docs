@@ -20,8 +20,10 @@ async void Start()
     string appName = "Docs-App-Demo";
     string backendUrl = "https://desonity-login.herokuapp.com";
 
-    var user = Desonity.Identity(appName, backendUrl);
-    string loggedInPublicKey = await user.Login();
+    var user = Desonity.Identity();
+    user.setLoginURL(backendUrl, appName);
+
+    await user.Login();
 }
 ```
 

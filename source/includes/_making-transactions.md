@@ -1,4 +1,13 @@
-# Creating Transactions
+# Transactions
+
+## Txn Generation and Submission
+
+Every successfull transaction on deso consists of the following steps:
+
+1. We make a post request to a deso endpoint, endpoint returns a transaction hex.
+2. We use the users seed hex and sign the transaction hex.
+3. We call another endpoint and submit the signed transaction hex.
+4. If everything went well, the transaction is successfull and will be synced with all nodes.
 
 ## Getting the Seed Hex
 
@@ -27,3 +36,53 @@ Currently Desonity only supports signing and submitting transactions through the
 I will appreciate if anyone knowing how to implement this within Unity can contribute to the project
 </aside>
 
+## Using Desonity functions
+
+To interact with deso APIs, you must first create an object that contains the necessasary data that will be needed by the endpoint.
+
+To do so, you must use the `Desonity.Endpoints` namespace in you C# script. This namespace contains all the classes for any endpoint implemented within Desonity.
+The endpoint object can then be passed into an appropriate function for processing.
+
+> For example, when you want to get the posts created by a public key, you must use the `GetPostsForPublicKey` class to create an object
+
+```cs
+using Desonity;
+using Desonity.Endpoints;
+...
+
+async void Start()
+{
+    // This payload will be later used in other funtions
+    var payload = new GetPostsForPublicKey{
+            Username = "weeblet",
+            NumToFetch = 10,
+            MediaRequired = true,
+            ...
+    }
+}
+```
+
+Once the post request has been done and (if) the API has returned some data, you will need to use one of the classes from `Desonity.Objects` namespace to store the returned data in an object of the appropriate class.
+
+> Continuing the above example, we will call `Desonity.Posts.getPostsForPublicKey()` and pass the `payload` we created earlier.
+
+```cs
+using Desonity;
+using Desonity.Endpoints;
+using Desonirt.Objects;
+...
+
+async void Start()
+{
+    var payload = ...;
+    PostsList usersPosts = Posts.getPostsForPublicKey(payload);
+    // getPostsForPublicKey has a return type PostsList,
+    // which contains a List object of type PostEntry
+}
+```
+
+**Summing it wup!**
+
+- Create transaction object using class from `Desonity.Endpoints`. (payload)
+- Process transaction by passing `payload` to a function.
+- Store data returned in an object using class form `Desonity.Objects`.

@@ -1,16 +1,21 @@
 ---
 title: Desonity Documentation
 
-language_tabs: # must be one of https://git.io/vQNgJ
-  - C#
+# language_tabs: # must be one of https://git.io/vQNgJ
+#  - C#
 
 toc_footers:
-  - <a href='https://github.com/Desonity'>Desonity on GitHub</a>
-  - <a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a>
+  - <a href='https://github.com/Desonity' target="_blank">Desonity on GitHub</a>
+  - <a href='https://diamondapp.com/u/weeblet' target="_blank">Made with ♥️ by weeblet</a>
+  - <a href='https://github.com/slatedocs/slate' target="_blank">Documentation Powered by Slate</a>
+  - I need help maintaining docs
 
 includes:
   - identity
   - making-transactions
+  - posts
+  - users
+  - nfts
 
 search: true
 collapse: true
@@ -34,7 +39,6 @@ This guide assumes you have prior knowledge of the Unity Game Engine and its too
 </aside>
 
 - Download the latest unitypackage from [releases](https://github.com/Desonity/Desonity/releases)
-  ![github releases](images/installation/releases.png)
 - Open the downloaded unitypackage in unity and import the files.
 
 That's it! You've imported Desonity in your project
