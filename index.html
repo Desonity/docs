@@ -295,7 +295,7 @@
     </script>
   </head>
 
-  <body class="index" data-languages="[&quot;C#&quot;]">
+  <body class="index" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -304,9 +304,6 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-510d91ce.png" class="logo" alt="" />
-        <div class="lang-selector">
-              <a href="#" data-language-name="C#">C#</a>
-        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -333,17 +330,34 @@
               </ul>
           </li>
           <li>
-            <a href="#creating-transactions" class="toc-h1 toc-link" data-title="Creating Transactions">Creating Transactions</a>
+            <a href="#transactions" class="toc-h1 toc-link" data-title="Transactions">Transactions</a>
               <ul class="toc-list-h2">
+                  <li>
+                    <a href="#txn-generation-and-submission" class="toc-h2 toc-link" data-title="Txn Generation and Submission">Txn Generation and Submission</a>
+                  </li>
                   <li>
                     <a href="#getting-the-seed-hex" class="toc-h2 toc-link" data-title="Getting the Seed Hex">Getting the Seed Hex</a>
                   </li>
+                  <li>
+                    <a href="#using-desonity-functions" class="toc-h2 toc-link" data-title="Using Desonity functions">Using Desonity functions</a>
+                  </li>
               </ul>
+          </li>
+          <li>
+            <a href="#posts" class="toc-h1 toc-link" data-title="Posts">Posts</a>
+          </li>
+          <li>
+            <a href="#users" class="toc-h1 toc-link" data-title="Users">Users</a>
+          </li>
+          <li>
+            <a href="#nfts" class="toc-h1 toc-link" data-title="NFTs">NFTs</a>
           </li>
       </ul>
         <ul class="toc-footer">
-            <li><a href='https://github.com/Desonity'>Desonity on GitHub</a></li>
-            <li><a href='https://github.com/slatedocs/slate'>Documentation Powered by Slate</a></li>
+            <li><a href='https://github.com/Desonity' target="_blank">Desonity on GitHub</a></li>
+            <li><a href='https://diamondapp.com/u/weeblet' target="_blank">Made with ♥️ by weeblet</a></li>
+            <li><a href='https://github.com/slatedocs/slate' target="_blank">Documentation Powered by Slate</a></li>
+            <li>I need help maintaining docs</li>
         </ul>
     </div>
     <div class="page-wrapper">
@@ -359,8 +373,7 @@ This guide assumes you have prior knowledge of the Unity Game Engine and its too
 </aside>
 
 <ul>
-<li>Download the latest unitypackage from <a href="https://github.com/Desonity/Desonity/releases">releases</a>
-<img src="images/installation/releases-534e76f5.png" alt="github releases" /></li>
+<li>Download the latest unitypackage from <a href="https://github.com/Desonity/Desonity/releases">releases</a></li>
 <li>Open the downloaded unitypackage in unity and import the files.</li>
 </ul>
 
@@ -407,8 +420,10 @@ If you are have conflicting dependencies for Desonity and your unity project, na
     <span class="kt">string</span> <span class="n">appName</span> <span class="p">=</span> <span class="s">"Docs-App-Demo"</span><span class="p">;</span>
     <span class="kt">string</span> <span class="n">backendUrl</span> <span class="p">=</span> <span class="s">"https://desonity-login.herokuapp.com"</span><span class="p">;</span>
 
-    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">(</span><span class="n">appName</span><span class="p">,</span> <span class="n">backendUrl</span><span class="p">);</span>
-    <span class="kt">string</span> <span class="n">loggedInPublicKey</span> <span class="p">=</span> <span class="k">await</span> <span class="n">user</span><span class="p">.</span><span class="nf">Login</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">user</span> <span class="p">=</span> <span class="n">Desonity</span><span class="p">.</span><span class="nf">Identity</span><span class="p">();</span>
+    <span class="n">user</span><span class="p">.</span><span class="nf">setLoginURL</span><span class="p">(</span><span class="n">backendUrl</span><span class="p">,</span> <span class="n">appName</span><span class="p">);</span>
+
+    <span class="k">await</span> <span class="n">user</span><span class="p">.</span><span class="nf">Login</span><span class="p">();</span>
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
@@ -447,7 +462,16 @@ If you are have conflicting dependencies for Desonity and your unity project, na
 <aside class="notice">
 This identity object will be used repeatedly with other classs to perform actions since all data such as Public Key and Seed Hex is stored with the identity object.
 </aside>
-<h1 id='creating-transactions'>Creating Transactions</h1><h2 id='getting-the-seed-hex'>Getting the Seed Hex</h2>
+<h1 id='transactions'>Transactions</h1><h2 id='txn-generation-and-submission'>Txn Generation and Submission</h2>
+<p>Every successfull transaction on deso consists of the following steps:</p>
+
+<ol>
+<li>We make a post request to a deso endpoint, endpoint returns a transaction hex.</li>
+<li>We use the users seed hex and sign the transaction hex.</li>
+<li>We call another endpoint and submit the signed transaction hex.</li>
+<li>If everything went well, the transaction is successfull and will be synced with all nodes.</li>
+</ol>
+<h2 id='getting-the-seed-hex'>Getting the Seed Hex</h2>
 <p>To be able to create a post using Desonity you will need the <strong>Seed Hex</strong> of the Public Key you are going to make the post from.</p>
 
 <p><strong>The Seed Hex is a sensitive Token that only the owner of the Public Key should have.</strong></p>
@@ -469,12 +493,64 @@ Currently Desonity only supports signing and submitting transactions through the
 <br>
 I will appreciate if anyone knowing how to implement this within Unity can contribute to the project
 </aside>
+<h2 id='using-desonity-functions'>Using Desonity functions</h2>
+<p>To interact with deso APIs, you must first create an object that contains the necessasary data that will be needed by the endpoint.</p>
+
+<p>To do so, you must use the <code>Desonity.Endpoints</code> namespace in you C# script. This namespace contains all the classes for any endpoint implemented within Desonity.
+The endpoint object can then be passed into an appropriate function for processing.</p>
+
+<blockquote>
+<p>For example, when you want to get the posts created by a public key, you must use the <code>GetPostsForPublicKey</code> class to create an object</p>
+</blockquote>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">using</span> <span class="nn">Desonity</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Desonity.Endpoints</span><span class="p">;</span>
+<span class="p">...</span>
+
+<span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="c1">// This payload will be later used in other funtions</span>
+    <span class="kt">var</span> <span class="n">payload</span> <span class="p">=</span> <span class="k">new</span> <span class="n">GetPostsForPublicKey</span><span class="p">{</span>
+            <span class="n">Username</span> <span class="p">=</span> <span class="s">"weeblet"</span><span class="p">,</span>
+            <span class="n">NumToFetch</span> <span class="p">=</span> <span class="m">10</span><span class="p">,</span>
+            <span class="n">MediaRequired</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span>
+            <span class="p">...</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Once the post request has been done and (if) the API has returned some data, you will need to use one of the classes from <code>Desonity.Objects</code> namespace to store the returned data in an object of the appropriate class.</p>
+
+<blockquote>
+<p>Continuing the above example, we will call <code>Desonity.Posts.getPostsForPublicKey()</code> and pass the <code>payload</code> we created earlier.</p>
+</blockquote>
+<div class="highlight"><pre class="highlight cs tab-csharp"><code><span class="k">using</span> <span class="nn">Desonity</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Desonity.Endpoints</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Desonirt.Objects</span><span class="p">;</span>
+<span class="p">...</span>
+
+<span class="k">async</span> <span class="k">void</span> <span class="nf">Start</span><span class="p">()</span>
+<span class="p">{</span>
+    <span class="kt">var</span> <span class="n">payload</span> <span class="p">=</span> <span class="p">...;</span>
+    <span class="n">PostsList</span> <span class="n">usersPosts</span> <span class="p">=</span> <span class="n">Posts</span><span class="p">.</span><span class="nf">getPostsForPublicKey</span><span class="p">(</span><span class="n">payload</span><span class="p">);</span>
+    <span class="c1">// getPostsForPublicKey has a return type PostsList,</span>
+    <span class="c1">// which contains a List object of type PostEntry</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Summing it wup!</strong></p>
+
+<ul>
+<li>Create transaction object using class from <code>Desonity.Endpoints</code>. (payload)</li>
+<li>Process transaction by passing <code>payload</code> to a function.</li>
+<li>Store data returned in an object using class form <code>Desonity.Objects</code>.</li>
+</ul>
+<h1 id='posts'>Posts</h1>
+<p>All functions relating to posts can be found under <code>Desonity.Posts</code></p>
+<h1 id='users'>Users</h1>
+<p>All functions relating to users can be found under <code>Desonity.Users</code></p>
+<h1 id='nfts'>NFTs</h1>
+<p>All functions relating to NFTs can be found under <code>Desonity.Nft</code></p>
 
       </div>
       <div class="dark-box">
-          <div class="lang-selector">
-                <a href="#" data-language-name="C#">C#</a>
-          </div>
       </div>
     </div>
   </body>
